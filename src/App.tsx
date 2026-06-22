@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button"
 import { MainLayout } from "@/lib/layouts/Main/MainLayout"
 import { LoginScreen } from "./features/auth/containers/LoginScreen";
-import { AuthLayout } from "./lib/layouts/Auth/AuthLayout";
-import { useState } from "react";
+import { AuthLayout } from "@/lib/layouts/Auth/AuthLayout";
+import { useAuthStore } from "./store/authStore";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   if (!isAuthenticated) {
     return (
