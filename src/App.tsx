@@ -1,7 +1,20 @@
 import { Button } from "@/components/ui/button"
 import { MainLayout } from "@/lib/layouts/Main/MainLayout"
+import { LoginScreen } from "./features/auth/containers/LoginScreen";
+import { AuthLayout } from "./lib/layouts/Auth/AuthLayout";
+import { useState } from "react";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <AuthLayout>
+        <LoginScreen />
+      </AuthLayout>
+    )
+  }
+  
   return (
     <MainLayout>
       <h1 className="text-2xl font-bold">Painel de Controle</h1>
