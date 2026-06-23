@@ -2,6 +2,7 @@ import React from "react";
 import { LoginForm } from "../components/LoginForm";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/authStore";
+import { api } from "../services/api";
 
 
 export const LoginScreen:React.FC = () => {
@@ -9,32 +10,24 @@ export const LoginScreen:React.FC = () => {
   
   const loginMutation = useMutation({
     mutationFn: async (data: {username: string, password: string}) => {
-      const response = await fetch("https://dummyjson.com/auth/login", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          username: data.username,
-          password: data.password,
-          expiresInMins: 30, 
-        })
+      const response = await api.post("/auth/login", {
+        username: data.username,
+        password: data.password,
+        expiresInMins: 30,
       })
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Erro ao fazer login");
-      }
-
-      return await response.json();
+      return response.data;
     },
 
     onSuccess: (data) => {
       console.log("SUCESSO! Resposta da API:", data);
-      login(data.token);
+      login(data.accessToken);
     },
 
-    onError: (error) => {
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Erro ao fazer login";
       console.error("FALHA AO LOGAR:", error);
-      alert(error.message);
+      alert(message);
     }
   })
 
