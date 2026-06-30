@@ -3,10 +3,12 @@ import { LoginForm } from "../components/LoginForm";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/authStore";
 import { api } from "../services/api";
+import { useNavigate } from '@tanstack/react-router'
 
 
 export const LoginScreen:React.FC = () => {
   const login = useAuthStore((state) => state.login);
+  const navigate = useNavigate();
   
   const loginMutation = useMutation({
     mutationFn: async (data: {username: string, password: string}) => {
@@ -22,6 +24,8 @@ export const LoginScreen:React.FC = () => {
     onSuccess: (data) => {
       console.log("SUCESSO! Resposta da API:", data);
       login(data.accessToken);
+      // Redireciona para o Dashboard protegido
+      navigate({ to: '/' });
     },
 
     onError: (error: any) => {
